@@ -1,0 +1,21 @@
+[
+    {
+        "modid": "foodcraftreloaded",
+        "name": "FoodCraft Reloaded",
+        "description": "A China and foreign food Minecraft mod",
+        "version": "@version@",
+        "credits": "Takakura Anri",
+        "logoFile": "",
+        "url": "https://github.com/Takakura-Anri/FoodCraft-Reloaded",
+        "updateUrl": "https://takakura-anri.github.io/FoodCraft-Reloaded/update.json",
+        "authors": [
+            "Takakura-Anri"
+        ],
+        "parent": "",
+        "screenshots": [],
+        "dependencies": [
+            "forgelin",
+            "mod_MinecraftForge"
+        ]
+    }
+]

@@ -1,0 +1,77 @@
+# Items
+# Vegetables
+# Beans
+item.foodcraftreloaded.red_bean.name=Red Bean
+item.foodcraftreloaded.black_bean.name=Black Bean
+item.foodcraftreloaded.green_bean.name=Green Bean
+item.foodcraftreloaded.soy_bea.namen=Soy Bean
+
+# Bean Sprouts
+item.foodcraftreloaded.sprouts.name=%s Sprouts
+
+# Foods
+# Fruits
+item.foodcraftreloaded.pear.name=Pear
+item.foodcraftreloaded.litchi.name=Litchi
+item.foodcraftreloaded.peach.name=Peach
+item.foodcraftreloaded.orange.name=Orange
+item.foodcraftreloaded.mango.name=Mango
+item.foodcraftreloaded.lemon.name=Lemon
+item.foodcraftreloaded.grapefruit.name=Grapefruit
+item.foodcraftreloaded.persimmon.name=Persimmon
+item.foodcraftreloaded.papaya.name=Papaya
+item.foodcraftreloaded.hawthorn.name=Hawthorn
+item.foodcraftreloaded.pomegranate.name=Pomegranate
+item.foodcraftreloaded.date.name=Date
+item.foodcraftreloaded.cherry.name=Cherry
+item.foodcraftreloaded.coconut.name=Coconut
+item.foodcraftreloaded.banana.name=Banana
+
+# Sapling
+item.foodcraftreloaded.sapling=%s树苗
+
+# Cake
+item.foodcraftreloaded.cake=%s Cake
+
+# Juice
+item.foodcraftreloaded.juice=%s Juice
+
+# Soda
+item.foodcraftreloaded.soda=%s Soda
+
+# Ice-cream
+item.foodcraftreloaded.original_ice_cream.name=Original Ice-cream
+item.foodcraftreloaded.iceCream=%s Ice-cream
+
+# Liqueur
+item.foodcraftreloaded.liqueur=%s Liqueur
+
+# Yogurt
+item.foodcraftreloaded.Yogurt=%s Yogurt
+
+# Blocks
+tile.rice.name=Rice Block
+tile.drinkMachine.name=Drink Machine
+tile.smeltingDrinkMachine.name=Smelting Drink Machine
+
+# Gui
+container.drink_machine=Drink Machine
+
+# ItemGroups
+itemGroup.foodcraftreloaded.base=FoodCraft|Base
+itemGroup.foodcraftreloaded.plant=FoodCraft|Plants
+itemGroup.foodcraftreloaded.drink=FoodCraft|Drinks
+itemGroup.foodcraftreloaded.staple=FoodCraft|Staples
+itemGroup.foodcraftreloaded.ingredient=FoodCraft|Ingredients
+itemGroup.foodcraftreloaded.snack=FoodCraft|Snacks
+
+# Tooltip
+tooltip.fcrfood.heal=Heal amount: %s
+tooltip.fcrfood.duration=Eat duration: %s second(s)
+tooltip.fcrfood.liqueur.type=Type: %s
+tooltip.fcrfood.liqueur.type.normal=Normal
+tooltip.fcrfood.liqueur.type.aged=Aged
+tooltip.fcrfood.liqueur.type.cocktail=Cocktail
+
+# Energy
+tooltip.fcr.energy=Energy: %sJ

@@ -27,14 +27,51 @@ item.foodcraftreloaded.cherry.name=Cherry
 item.foodcraftreloaded.coconut.name=Coconut
 item.foodcraftreloaded.banana.name=Banana
 
+# Vegetables
+item.foodcraftreloaded.eggplant.name=Eggplant
+item.foodcraftreloaded.cucumber.name=Cucumber
+item.foodcraftreloaded.cabbage.name=Cabbage
+item.foodcraftreloaded.lettuce.name=Lettuce
+item.foodcraftreloaded.artemisia_stalk.name=Artemisia Stalk
+item.foodcraftreloaded.spinach.name=Spinach
+item.foodcraftreloaded.celery.name=Celery
+item.foodcraftreloaded.tomato.name=Tomato
+item.foodcraftreloaded.rice.name=Rice
+item.foodcraftreloaded.glutinous_rice.name=Glutinous Rice
+item.foodcraftreloaded.black_rice.name=Black Rice
+item.foodcraftreloaded.corn.name=Corn
+item.foodcraftreloaded.peanut.name=Peanut
+item.foodcraftreloaded.radish.name=Radish
+item.foodcraftreloaded.white_radish.name=White Radish
+item.foodcraftreloaded.red_pepper.name=Red Pepper
+item.foodcraftreloaded.green_pepper.name=Green Pepper
+item.foodcraftreloaded.facing_heaven_pepper.name=Facing Heaven Pepper
+item.foodcraftreloaded.pepper.name=Pepper
+item.foodcraftreloaded.zanthoxylum.name=Zanthoxylum
+item.foodcraftreloaded.red_sweet_potato.name=Red Sweet Potato
+item.foodcraftreloaded.white_sweet_potato.name=White Sweet Potato
+item.foodcraftreloaded.sesame.name=Sesame
+item.foodcraftreloaded.garlic.name=Garlic
+item.foodcraftreloaded.ginger.name=Ginger
+item.foodcraftreloaded.onion.name=Onion
+item.foodcraftreloaded.green_onion.name=Green Onion
+
+# Manufactured
+item.foodcraftreloaded.ring=%s Ring
+item.foodcraftreloaded.chunk=%s Chunk
+item.foodcraftreloaded.powder=%s Powder
+item.foodcraftreloaded.bar=%s Bar
+item.foodcraftreloaded.slice=%s Slice
+item.foodcraftreloaded.jam=%s Jam
+# Juice
+item.foodcraftreloaded.juice=%s Juice
+item.foodcraftreloaded.shredded=%s Shredded
+
 # Sapling
 item.foodcraftreloaded.sapling=%s树苗
 
 # Cake
 item.foodcraftreloaded.cake=%s Cake
-
-# Juice
-item.foodcraftreloaded.juice=%s Juice
 
 # Soda
 item.foodcraftreloaded.soda=%s Soda
@@ -47,7 +84,7 @@ item.foodcraftreloaded.iceCream=%s Ice-cream
 item.foodcraftreloaded.liqueur=%s Liqueur
 
 # Yogurt
-item.foodcraftreloaded.Yogurt=%s Yogurt
+item.foodcraftreloaded.yogurt=%s Yogurt
 
 # Blocks
 tile.rice.name=Rice Block
@@ -59,19 +96,18 @@ container.drink_machine=Drink Machine
 
 # ItemGroups
 itemGroup.foodcraftreloaded.base=FoodCraft|Base
-itemGroup.foodcraftreloaded.plant=FoodCraft|Plants
-itemGroup.foodcraftreloaded.drink=FoodCraft|Drinks
-itemGroup.foodcraftreloaded.staple=FoodCraft|Staples
-itemGroup.foodcraftreloaded.ingredient=FoodCraft|Ingredients
-itemGroup.foodcraftreloaded.snack=FoodCraft|Snacks
+itemGroup.foodcraftreloaded.fruits=FoodCraft | Fruits
+itemGroup.foodcraftreloaded.vegetables=FoodCraft | Vegetables
+itemGroup.foodcraftreloaded.manufactures=FoodCraft | Component
 
 # Tooltip
-tooltip.fcrfood.heal=Heal amount: %s
-tooltip.fcrfood.duration=Eat duration: %s second(s)
-tooltip.fcrfood.liqueur.type=Type: %s
-tooltip.fcrfood.liqueur.type.normal=Normal
-tooltip.fcrfood.liqueur.type.aged=Aged
-tooltip.fcrfood.liqueur.type.cocktail=Cocktail
+tooltip.foodcraftreloaded.manufacture=Manufacturable into: [%s]
+tooltip.foodcraftreloaded.heal=Heal amount: %s
+tooltip.foodcraftreloaded.duration=Eat duration: %s second(s)
+tooltip.foodcraftreloaded.liqueur.type=Type: %s
+tooltip.foodcraftreloaded.liqueur.type.normal=Normal
+tooltip.foodcraftreloaded.liqueur.type.aged=Aged
+tooltip.foodcraftreloaded.liqueur.type.cocktail=Cocktail
 
 # Energy
 tooltip.fcr.energy=Energy: %sJ

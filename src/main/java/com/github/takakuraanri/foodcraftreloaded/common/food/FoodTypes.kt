@@ -37,8 +37,21 @@ data class BasicFoodType(
     override var healModifier: Double = 1.0,
     override var saturationModifier: Float = 1.0f,
     override var edibleModifier: Boolean = false,
-    override var durationModifier: Double = 1.0
+    override var durationModifier: Double = 1.0,
+    val uniqueId: UUID = UUID.randomUUID()
 ): FoodType, IForgeRegistryEntry.Impl<FoodType>() {
+    override fun hashCode(): Int {
+        return uniqueId.hashCode()
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is BasicFoodType) return false
+
+        if (uniqueId != other.uniqueId) return false
+
+        return true
+    }
 }
 
 val DEFAULT_FOOD_TYPE: FoodType = BasicFoodType().setRegistryName("default")
@@ -56,7 +69,20 @@ interface Food: IForgeRegistryEntry<Food> {
 data class BasicFood(
     override var healAmount: Int = 0, override var saturation: Float = 0.6f, override var alwaysEdible: Boolean = false,
     override var itemUseDuration: Int = 32
-): Food, IForgeRegistryEntry.Impl<Food>()
+): Food, IForgeRegistryEntry.Impl<Food>() {
+    override fun hashCode(): Int {
+        return registryName.hashCode()
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is BasicFood) return false
+
+        if (registryName != other.registryName) return false
+
+        return true
+    }
+}
 
 class FoodContainer(val food: Food = BasicFood(), var type: FoodType = BasicFoodType()): Food by food, Cloneable {
     val properties: MutableMap<FoodProperty<*>, Any> = HashMap()

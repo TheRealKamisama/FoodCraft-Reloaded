@@ -3,6 +3,7 @@ package com.github.takakuraanri.foodcraftreloaded.minecraft.common.builtin
 import com.github.takakuraanri.foodcraftreloaded.common.food.*
 import com.github.takakuraanri.foodcraftreloaded.common.food.ManufactureProperties.*
 import com.github.takakuraanri.foodcraftreloaded.minecraft.common.MODID
+import com.github.takakuraanri.foodcraftreloaded.minecraft.common.foodTypeRegistry
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import net.minecraft.util.ResourceLocation
@@ -300,6 +301,13 @@ fun generateManufactures(container: FoodContainer) = runBlocking {
 }
 
 fun registerBuiltins() = runBlocking {
+    launch {
+        foodTypeRegistry.registerAll(
+            fruitType.setRegistryName(MODID, "fruits"),
+            vegetableType.setRegistryName(MODID, "vegetables"),
+            manufactureType.setRegistryName(MODID, "manufactures")
+        )
+    }
     launch {
         // Foods
         BuiltinFruits.values().forEach {

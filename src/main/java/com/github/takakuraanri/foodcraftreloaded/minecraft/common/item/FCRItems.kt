@@ -2,6 +2,8 @@ package com.github.takakuraanri.foodcraftreloaded.minecraft.common.item
 
 import com.github.takakuraanri.foodcraftreloaded.common.food.*
 import com.github.takakuraanri.foodcraftreloaded.minecraft.common.builtin.manufactureType
+import com.github.takakuraanri.foodcraftreloaded.minecraft.common.foodTypeCreativeTabs
+import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemFood
 import net.minecraft.item.ItemStack
@@ -50,6 +52,14 @@ open class FCRItemFood(var food: Food) : ItemFood(0, false) {
         } else {
             ActionResult(EnumActionResult.FAIL, itemStack)
         }
+    }
+
+    override fun getCreativeTab(): CreativeTabs? {
+        if (food is FoodContainer) {
+            val container = food as FoodContainer
+            return foodTypeCreativeTabs[container.type]
+        }
+        return null
     }
 }
 

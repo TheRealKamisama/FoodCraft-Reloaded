@@ -11,6 +11,7 @@ val originalFood = BasicFoodProperty(FoodContainer::class.java)
 val manufacturedProperty = BasicFoodProperty(ManufactureProperties::class.java)
 val color = BasicFoodProperty(Int::class.java)
 val colorTintIndex = BasicFoodProperty(Int::class.java)
+val productProperty = BasicFoodProperty(FoodProduct::class.java)
 
 data class BasicFoodProperty<T>(override val valueClass: Class<T>, val uniqueId: UUID = UUID.randomUUID()): FoodProperty<T>
 
@@ -42,26 +43,6 @@ enum class ManufactureProperties: FoodProperty<ManufactureData> {
      * 片
      */
     SLICE,
-
-    /**
-     * 果酱
-     */
-    JAM,
-
-    /**
-     * 汁
-     */
-    JUICE,
-
-    /**
-     * 苏打水
-     */
-    SODA,
-
-    /**
-     * 酸奶
-     */
-    YOGURT,
 
     /**
      * 丝

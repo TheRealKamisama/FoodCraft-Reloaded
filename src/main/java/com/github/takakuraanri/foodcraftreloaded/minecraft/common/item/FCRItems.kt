@@ -3,6 +3,9 @@ package com.github.takakuraanri.foodcraftreloaded.minecraft.common.item
 import com.github.takakuraanri.foodcraftreloaded.common.food.*
 import com.github.takakuraanri.foodcraftreloaded.minecraft.common.builtin.manufactureType
 import com.github.takakuraanri.foodcraftreloaded.minecraft.common.foodTypeCreativeTabs
+import com.github.takakuraanri.foodcraftreloaded.minecraft.getLocalizedName
+import com.github.takakuraanri.foodcraftreloaded.minecraft.translate
+import net.minecraft.client.util.ITooltipFlag
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemFood
@@ -25,6 +28,10 @@ open class FCRItemFood(var food: Food) : ItemFood(0, false) {
             if (container.type == manufactureType) {
                 return I18n.translateToLocalFormatted(
                     "item.foodcraftreloaded.${container.getProperty(manufacturedProperty).map(ManufactureProperties::toString).orElse("")}",
+                    I18n.translateToLocal("item.${container.getProperty(originalFood).map { "${it.registryName?.namespace}.${it.registryName?.path}" }.orElse("")}.name").trim())
+            } else if (container.properties.containsKey(productProperty)) {
+                return I18n.translateToLocalFormatted(
+                    "item.foodcraftreloaded.${container.getProperty(productProperty).map(FoodProduct::toString).orElse("")}",
                     I18n.translateToLocal("item.${container.getProperty(originalFood).map { "${it.registryName?.namespace}.${it.registryName?.path}" }.orElse("")}.name").trim())
             }
         }
@@ -61,6 +68,16 @@ open class FCRItemFood(var food: Food) : ItemFood(0, false) {
         }
         return null
     }
+
+    override fun addInformation(stack: ItemStack, worldIn: World?, tooltip: MutableList<String>, flagIn: ITooltipFlag) {
+        tooltip += translate("tooltip.foodcraftreloaded.heal", food.healAmount)
+        if (food is FoodContainer) {
+            val container = food as FoodContainer
+            tooltip += translate("tooltip.foodcraftreloaded.type", container.type.getLocalizedName())
+        }
+    }
 }
+
+
 
 class ItemManufacturedFood(var food: Food)

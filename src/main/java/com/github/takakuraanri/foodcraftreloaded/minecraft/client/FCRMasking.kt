@@ -1,9 +1,6 @@
 package com.github.takakuraanri.foodcraftreloaded.minecraft.client
 
-import com.github.takakuraanri.foodcraftreloaded.common.food.FoodContainer
-import com.github.takakuraanri.foodcraftreloaded.common.food.color
-import com.github.takakuraanri.foodcraftreloaded.common.food.colorTintIndex
-import com.github.takakuraanri.foodcraftreloaded.common.food.manufacturedProperty
+import com.github.takakuraanri.foodcraftreloaded.common.food.*
 import com.github.takakuraanri.foodcraftreloaded.minecraft.common.MODID
 import com.github.takakuraanri.foodcraftreloaded.minecraft.common.foodMap
 import net.minecraft.client.renderer.block.model.ModelBakery
@@ -36,6 +33,11 @@ fun registerModels() {
         if (it.key is FoodContainer && (it.key as FoodContainer).properties.containsKey(manufacturedProperty)) {
             val container = it.key as FoodContainer
             val model = ModelResourceLocation(ResourceLocation(MODID, container[manufacturedProperty].toString()), "inventory")
+            ModelLoader.setCustomMeshDefinition(it.value) { model }
+            ModelBakery.registerItemVariants(it.value, model)
+        } else if (it.key is FoodContainer && (it.key as FoodContainer).properties.containsKey(productProperty)) { // TODO Merge manufactures and products
+            val container = it.key as FoodContainer
+            val model = ModelResourceLocation(ResourceLocation(MODID, container[productProperty].toString()), "inventory")
             ModelLoader.setCustomMeshDefinition(it.value) { model }
             ModelBakery.registerItemVariants(it.value, model)
         } else {

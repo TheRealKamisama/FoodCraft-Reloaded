@@ -99,10 +99,16 @@ itemGroup.foodcraftreloaded.fruits=FoodCraft | Fruits
 itemGroup.foodcraftreloaded.vegetables=FoodCraft | Vegetables
 itemGroup.foodcraftreloaded.manufactures=FoodCraft | Component
 
+# Food Types
+type.foodcraftreloaded.vegetables=§bVegetables
+type.foodcraftreloaded.fruits=§aFruits
+type.foodcraftreloaded.manufactures=§3Manufactures
+
 # Tooltip
 tooltip.foodcraftreloaded.manufacture=Manufacturable into: [%s]
 tooltip.foodcraftreloaded.heal=Heal amount: %s
 tooltip.foodcraftreloaded.duration=Eat duration: %s second(s)
+tooltip.foodcraftreloaded.type=Type: %s
 tooltip.foodcraftreloaded.liqueur.type=Type: %s
 tooltip.foodcraftreloaded.liqueur.type.normal=Normal
 tooltip.foodcraftreloaded.liqueur.type.aged=Aged

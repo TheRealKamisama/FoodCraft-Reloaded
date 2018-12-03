@@ -15,7 +15,7 @@ object RegisterEventHandler {
     fun onRegisterItem(event: RegistryEvent.Register<Item>) {
         foodTypeRegistry.valuesCollection.asSequence().map { it to object : CreativeTabs(it.registryName.toDotString()) {
                 override fun createIcon(): ItemStack {
-                    val food = foodMap[foodTypeCache[it].first()]
+                    val food = if (foodTypeCache[it].isNotEmpty()) foodMap[foodTypeCache[it].first()] else null
                     return if (food == null) ItemStack.EMPTY else ItemStack(food)
                 }
             }
@@ -28,9 +28,9 @@ object RegisterEventHandler {
 
         foodRegistry.valuesCollection
             .asSequence()
-            .map{ it to FCRItemFood(it) }
-            .onEach{ foodMap[it.first] = it.second }
-            .onEach{ event.registry.register(it.second) }
+            .map { it to FCRItemFood(it) }
+            .onEach { foodMap[it.first] = it.second }
+            .onEach { event.registry.register(it.second) }
             .filter { it.first is FoodContainer }
             .map { it.first as FoodContainer }
             .forEach { foodTypeCache[it.type] += it }

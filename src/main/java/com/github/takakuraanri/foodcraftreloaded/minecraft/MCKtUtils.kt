@@ -18,3 +18,5 @@ fun translate(key: String, vararg params: Any): String = I18n.translateToLocalFo
 fun FoodType.getLocalizedName() = translate("type.${this.registryName.toDotString()}")
 
 fun <T> IForgeRegistryEntry<T>.toString() = registryName
+
+operator fun ResourceLocation?.plus(s: String): ResourceLocation = if (this == null) ResourceLocation("dummy") else ResourceLocation(namespace, path + s)

@@ -9,7 +9,9 @@ enum class FoodProducts(
     override var healModifier: Double = 1.0,
     override var saturationModifier: Float = 1f,
     override var edibleModifier: Boolean = false,
-    override var durationModifier: Double = 1.0
+    override var durationModifier: Double = 1.0,
+    override var superType: FoodType? = null,
+    override val validProperties: List<FoodProperty<*>> = listOf(color, colorTintIndex, originalFood, productProperty)
 ): FoodProduct {
     /**
      * 果酱
@@ -19,17 +21,17 @@ enum class FoodProducts(
     /**
      * 汁
      */
-    JUICE,
+    JUICE(superType = drinkType),
 
     /**
      * 苏打水
      */
-    SODA,
+    SODA(superType = drinkType),
 
     /**
      * 酸奶
      */
-    YOGURT;
+    YOGURT(superType = drinkType);
 
     override fun getRegistryName(): ResourceLocation = ResourceLocation(MODID, toString())
 

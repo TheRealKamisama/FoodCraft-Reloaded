@@ -11,12 +11,12 @@ import net.minecraftforge.registries.IForgeRegistry
 import net.minecraftforge.registries.RegistryBuilder
 
 val foodTypeRegistry: IForgeRegistry<FoodType> = RegistryBuilder<FoodType>()
-    .setName(ResourceLocation("food_type"))
+    .setName(ResourceLocation(MODID, "food_type"))
     .setType(FoodType::class.java)
     .create()
 
 val foodRegistry: IForgeRegistry<Food> = RegistryBuilder<Food>()
-    .setName(ResourceLocation("food"))
+    .setName(ResourceLocation(MODID, "food"))
     .setType(Food::class.java)
     .create()
 

@@ -1,16 +1,26 @@
 package com.github.takakuraanri.foodcraftreloaded.minecraft.common.builtin
 
 import com.github.takakuraanri.foodcraftreloaded.common.food.*
+import com.github.takakuraanri.foodcraftreloaded.common.food.FoodManufactures.*
 import com.github.takakuraanri.foodcraftreloaded.common.food.FoodProducts.*
-import com.github.takakuraanri.foodcraftreloaded.common.food.ManufactureProperties.*
 import com.github.takakuraanri.foodcraftreloaded.minecraft.common.MODID
 import com.github.takakuraanri.foodcraftreloaded.minecraft.common.foodTypeRegistry
+import com.github.takakuraanri.foodcraftreloaded.minecraft.plus
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import net.minecraft.util.ResourceLocation
 import java.awt.Color
 
-enum class BuiltinFruits(val color: Color) {
+interface FoodTypeProvider {
+    val type: FoodType
+    val subTypes: List<FoodType>
+}
+interface Colorable {
+    val color: Color
+}
+interface BuiltinType: FoodTypeProvider, Colorable
+
+enum class BuiltinFruits(override val color: Color): BuiltinType {
     /**
      * Pear
      * 梨
@@ -101,11 +111,15 @@ enum class BuiltinFruits(val color: Color) {
      */
     BANANA(Color(0xf7eb6a));
 
-    val manufactures: List<ManufactureProperties> = listOf(SHREDDED, CHUNK, SLICE)
-    val products: List<FoodProduct> = listOf(JAM, JUICE, SODA, YOGURT)
+    override val type: FoodType = fruitType
+    override val subTypes: List<FoodType> = listOf(SHREDDED, CHUNK, SLICE, JAM, JUICE, SODA, YOGURT)
+
+    override fun toString(): String {
+        return name.toLowerCase()
+    }
 }
 
-enum class BuiltinVegetables(val color: Color) {
+enum class BuiltinVegetables(override val color: Color): BuiltinType {
     /**
      * 茄子
      * Eggplant
@@ -274,87 +288,44 @@ enum class BuiltinVegetables(val color: Color) {
      */
     GREEN_ONION(Color(0x84F941));
 
-    val manufactures: List<ManufactureProperties> = listOf(SHREDDED, CHUNK, SLICE, RING, POWDER)
-    val products: List<FoodProduct> = listOf(JAM, JUICE, SODA, YOGURT)
-}
+    override val type: FoodType = vegetableType
+    override val subTypes: List<FoodType> = listOf(SHREDDED, CHUNK, SLICE, RING, POWDER, JAM, JUICE, SODA, YOGURT)
 
-val fruitType = BasicFoodType(1.0, 0.4f)
-val vegetableType = BasicFoodType(1.0, 0.3f)
-
-val manufactureType = BasicFoodType(0.0, 0f, false, 16384.0)
-
-fun generateManufactures(container: FoodContainer) = runBlocking {
-    container.properties.forEach {
-        if (it.key is ManufactureProperties) {
-            val manufacture = it.key as ManufactureProperties
-            food {
-                registryName = ResourceLocation(container.registryName?.namespace
-                    ?: MODID, "${container.registryName?.path}_${it.key}")
-                type = manufactureType
-                withProperty(originalFood, container)
-                withProperty(color, container.getProperty(color))
-                withProperty(manufacturedProperty, manufacture)
-            }
-        }
+    override fun toString(): String {
+        return name.toLowerCase()
     }
 }
+
+val builtins = emptySet<BuiltinType>()
+    .union(BuiltinFruits.values().asIterable())
+    .union(BuiltinVegetables.values().asIterable())
 
 fun registerBuiltins() = runBlocking {
     launch {
         foodTypeRegistry.registerAll(
             fruitType.setRegistryName(MODID, "fruits"),
             vegetableType.setRegistryName(MODID, "vegetables"),
-            manufactureType.setRegistryName(MODID, "manufactures")
+            manufactureType.setRegistryName(MODID, "manufactures"),
+            drinkType.setRegistryName(MODID, "drinks")
         )
-        FoodProducts.values().map { BasicFoodType().setRegistryName(it.registryName) }.forEach(foodTypeRegistry::register)
+        FoodProducts.values().forEach(foodTypeRegistry::register)
+        FoodManufactures.values().forEach(foodTypeRegistry::register)
     }
     launch {
-        // Foods
-        BuiltinFruits.values().forEach {
+        builtins.forEach {
             val food = food {
-                registryName = ResourceLocation(MODID, it.name.toLowerCase())
+                registryName = ResourceLocation(MODID, it.toString())
                 healAmount = 1
                 saturation = 1f
-                type = fruitType
-                properties.putAll(it.manufactures.map { property -> property to ManufactureData() })
+                type = it.type
             }
-            FoodProducts.values().forEach { product ->
+            it.subTypes.forEach { subType ->
                 food {
-                    registryName = ResourceLocation(MODID, "${it.name.toLowerCase()}_$product")
-                    healAmount = 1
-                    saturation = 1f
-                    type = product
+                    registryName = food.registryName + "_$subType"
+                    type = subType
+                    withProperty(originalFood, food)
                     withProperty(color, it.color.rgb)
-                    properties[productProperty] = product
-                    properties[originalFood] = food
-                    when (product) {
-                        JUICE -> withProperty(colorTintIndex, 1)
-                        SODA -> withProperty(colorTintIndex, 1)
-                    }
-                }
-            }
-        }
-    }
-    launch {
-        // Vegetables
-        BuiltinVegetables.values().forEach {
-            val food = food {
-                registryName = ResourceLocation(MODID, it.name.toLowerCase())
-                healAmount = 1
-                saturation = 1f
-                type = vegetableType
-                properties.putAll(it.manufactures.map { property -> property to ManufactureData() })
-            }
-            FoodProducts.values().forEach { product ->
-                food {
-                    registryName = ResourceLocation(MODID, "${it.name.toLowerCase()}_$product")
-                    healAmount = 1
-                    saturation = 1f
-                    type = product
-                    withProperty(color, it.color.rgb)
-                    properties[productProperty] = product
-                    properties[originalFood] = food
-                    when (product) {
+                    when (subType) {
                         JUICE -> withProperty(colorTintIndex, 1)
                         SODA -> withProperty(colorTintIndex, 1)
                     }

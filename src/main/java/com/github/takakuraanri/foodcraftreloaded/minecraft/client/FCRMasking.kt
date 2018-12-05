@@ -1,11 +1,16 @@
 package com.github.takakuraanri.foodcraftreloaded.minecraft.client
 
-import com.github.takakuraanri.foodcraftreloaded.common.food.*
+import com.github.takakuraanri.foodcraftreloaded.common.food.FoodContainer
+import com.github.takakuraanri.foodcraftreloaded.common.food.color
+import com.github.takakuraanri.foodcraftreloaded.common.food.colorTintIndex
+import com.github.takakuraanri.foodcraftreloaded.common.food.originalFood
 import com.github.takakuraanri.foodcraftreloaded.minecraft.common.MODID
 import com.github.takakuraanri.foodcraftreloaded.minecraft.common.foodMap
+import com.github.takakuraanri.foodcraftreloaded.minecraft.common.item.FCRItemFood
 import net.minecraft.client.renderer.block.model.ModelBakery
 import net.minecraft.client.renderer.block.model.ModelResourceLocation
 import net.minecraft.client.renderer.color.ItemColors
+import net.minecraft.item.ItemStack
 import net.minecraft.util.ResourceLocation
 import net.minecraftforge.client.event.ColorHandlerEvent
 import net.minecraftforge.client.event.ModelRegistryEvent
@@ -30,14 +35,9 @@ object ModelHandler {
 
 fun registerModels() {
     foodMap.forEach {
-        if (it.key is FoodContainer && (it.key as FoodContainer).properties.containsKey(manufacturedProperty)) {
+        if (it.key is FoodContainer && (it.key as FoodContainer).properties.containsKey(originalFood)) {
             val container = it.key as FoodContainer
-            val model = ModelResourceLocation(ResourceLocation(MODID, container[manufacturedProperty].toString()), "inventory")
-            ModelLoader.setCustomMeshDefinition(it.value) { model }
-            ModelBakery.registerItemVariants(it.value, model)
-        } else if (it.key is FoodContainer && (it.key as FoodContainer).properties.containsKey(productProperty)) { // TODO Merge manufactures and products
-            val container = it.key as FoodContainer
-            val model = ModelResourceLocation(ResourceLocation(MODID, container[productProperty].toString()), "inventory")
+            val model = ModelResourceLocation(ResourceLocation(MODID, container.type.toString()), "inventory")
             ModelLoader.setCustomMeshDefinition(it.value) { model }
             ModelBakery.registerItemVariants(it.value, model)
         } else {
@@ -49,18 +49,22 @@ fun registerModels() {
 }
 
 fun registerItemColors(itemColors: ItemColors) {
-    foodMap.forEach {
-        if (it.key is FoodContainer && (it.key as FoodContainer).properties.containsKey(color)) {
-            val container = it.key as FoodContainer
-            val rgbColor = container.properties[color] as Int? ?: -1
-                itemColors.registerItemColorHandler({ _, tintIndex ->
-                    val returned =
-                        if (container.properties.containsKey(colorTintIndex))
-                            if (tintIndex == container.properties[colorTintIndex] as Int?) rgbColor else -1
-                        else
-                            if (tintIndex == 0) rgbColor else -1
-                    returned
-            }, arrayOf(it.value))
-        }
-    }
+    itemColors.registerItemColorHandler(
+        { stack: ItemStack, tintIndex: Int ->
+            if (stack.item is FCRItemFood && (stack.item as FCRItemFood).food is FoodContainer) {
+                val container = (stack.item as FCRItemFood).food as FoodContainer
+                val rgbColor = container.getProperty(color).orElse(-1)
+                val returned =
+                    if (container.properties.containsKey(colorTintIndex))
+                        if (tintIndex == container.properties[colorTintIndex] as Int?) rgbColor else -1
+                    else
+                        if (tintIndex == 0) rgbColor else -1
+                returned
+            } else-1
+        },
+        foodMap
+            .filter { it.key is FoodContainer && (it.key as FoodContainer).properties.containsKey(color) }
+            .map { it.value }
+            .toTypedArray()
+    )
 }

@@ -1,24 +1,42 @@
 package com.github.takakuraanri.foodcraftreloaded.common.food
 
-import kotlinx.serialization.Serializable
-import java.util.*
+import com.github.takakuraanri.foodcraftreloaded.minecraft.common.MODID
+import net.minecraft.util.ResourceLocation
+import net.minecraftforge.registries.IForgeRegistryEntry
 
-interface FoodProperty<T> {
+val originalFood = BasicFoodProperty(FoodContainer::class.java).setRegistryName("original_food")
+val manufacturedProperty = BasicFoodProperty(FoodManufactures::class.java).setRegistryName("manufacture")
+val color = BasicFoodProperty(Int::class.java).setRegistryName("color")
+val colorTintIndex = BasicFoodProperty(Int::class.java).setRegistryName("color_tint_index")
+val productProperty = BasicFoodProperty(FoodProduct::class.java).setRegistryName("product")
+
+interface FoodProperty<T>: IForgeRegistryEntry<FoodProperty<T>> {
     val valueClass: Class<T>
 }
 
-val originalFood = BasicFoodProperty(FoodContainer::class.java)
-val manufacturedProperty = BasicFoodProperty(ManufactureProperties::class.java)
-val color = BasicFoodProperty(Int::class.java)
-val colorTintIndex = BasicFoodProperty(Int::class.java)
-val productProperty = BasicFoodProperty(FoodProduct::class.java)
+data class BasicFoodProperty<T>(override val valueClass: Class<T>): FoodProperty<T>, IForgeRegistryEntry.Impl<FoodProperty<T>>() {
+    override fun hashCode(): Int {
+        return registryName?.hashCode() ?: super.hashCode()
+    }
 
-data class BasicFoodProperty<T>(override val valueClass: Class<T>, val uniqueId: UUID = UUID.randomUUID()): FoodProperty<T>
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is FoodProperty<*>) return false
 
-@Serializable
-data class ManufactureData(val buildItem: Boolean = true)
+        if (registryName != other.registryName) return false
 
-enum class ManufactureProperties: FoodProperty<ManufactureData> {
+        return true
+    }
+}
+
+enum class FoodManufactures(
+    override var healModifier: Double = 1.0,
+    override var saturationModifier: Float = 1f,
+    override var edibleModifier: Boolean = false,
+    override var durationModifier: Double = 1.0,
+    override var superType: FoodType? = manufactureType,
+    override val validProperties: List<FoodProperty<*>> = listOf(color, colorTintIndex, originalFood, productProperty)
+): FoodType {
     /**
      * 圈
      */
@@ -48,10 +66,16 @@ enum class ManufactureProperties: FoodProperty<ManufactureData> {
      * 丝
      */
     SHREDDED;
-
-    override val valueClass: Class<ManufactureData> = ManufactureData::class.java
     
     override fun toString(): String {
         return name.toLowerCase()
+    }
+
+    override fun getRegistryName(): ResourceLocation = ResourceLocation(MODID, toString())
+
+    override fun getRegistryType(): Class<FoodType> = javaClass
+
+    override fun setRegistryName(name: ResourceLocation?): FoodType {
+        throw IllegalAccessException("Cannot set registryName on an enum")
     }
 }

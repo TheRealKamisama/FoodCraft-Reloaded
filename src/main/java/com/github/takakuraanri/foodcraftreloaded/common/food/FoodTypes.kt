@@ -8,11 +8,20 @@ import net.minecraftforge.registries.IForgeRegistryEntry
 import java.util.*
 import kotlin.reflect.KClass
 
+val DEFAULT_FOOD_TYPE: FoodType = BasicFoodType().setRegistryName("default")
+val fruitType = BasicFoodType(1.0, 0.4f, validProperties = listOf(color, colorTintIndex))
+val vegetableType = BasicFoodType(1.0, 0.3f, validProperties = listOf(color, colorTintIndex))
+val drinkType = BasicFoodType(8.0, 0.5f, validProperties = listOf(color, colorTintIndex, productProperty, originalFood))
+
+val manufactureType = BasicFoodType(0.0, 0f, false, 16384.0, validProperties = listOf(color, colorTintIndex, manufacturedProperty, originalFood))
+
 interface FoodType: IForgeRegistryEntry<FoodType> {
     var healModifier: Double
     var saturationModifier: Float
     var edibleModifier: Boolean // True for invert, False for passing it
     var durationModifier: Double
+    val validProperties: List<FoodProperty<*>>
+    var superType: FoodType?
 
     fun createFoods(vararg registryNames: String, init: () -> FoodContainer = { FoodContainer(food { healAmount = 1; saturation = 1.0f }) }) {
         createFoods(registryNames.asIterable(), init)
@@ -38,23 +47,22 @@ data class BasicFoodType(
     override var saturationModifier: Float = 1.0f,
     override var edibleModifier: Boolean = false,
     override var durationModifier: Double = 1.0,
-    val uniqueId: UUID = UUID.randomUUID()
+    override var superType: FoodType? = null,
+    override val validProperties: List<FoodProperty<*>> = listOf()
 ): FoodType, IForgeRegistryEntry.Impl<FoodType>() {
     override fun hashCode(): Int {
-        return uniqueId.hashCode()
+        return registryName?.hashCode() ?: super.hashCode()
     }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (other !is BasicFoodType) return false
+        if (other !is FoodType) return false
 
-        if (uniqueId != other.uniqueId) return false
+        if (registryName != other.registryName) return false
 
         return true
     }
 }
-
-val DEFAULT_FOOD_TYPE: FoodType = BasicFoodType().setRegistryName("default")
 
 interface Food: IForgeRegistryEntry<Food> {
     var healAmount: Int
@@ -108,6 +116,25 @@ class FoodContainer(val food: Food = BasicFood(), var type: FoodType = BasicFood
         = Optional.ofNullable(properties[property] as T?)
 
     operator fun <T> get(property: FoodProperty<T>): T? = properties[property] as T?
+    override fun toString(): String {
+        return "FoodContainer(food=$food, type=$type, properties=$properties)"
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is FoodContainer) return false
+
+        if (registryName != other.registryName) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = food.hashCode()
+        result = 31 * result + type.hashCode()
+        result = 31 * result + properties.hashCode()
+        return result
+    }
 
     override var healAmount: Int = food.healAmount
         get() = (food.healAmount * type.healModifier).toInt()
@@ -117,6 +144,7 @@ class FoodContainer(val food: Food = BasicFood(), var type: FoodType = BasicFood
         get() = (food.itemUseDuration * type.durationModifier).toInt()
     override var alwaysEdible: Boolean = food.alwaysEdible
         get() = if (type.edibleModifier) food.alwaysEdible else !food.alwaysEdible
+
 }
 
 fun food(init: FoodContainer.() -> Unit): FoodContainer {
@@ -125,3 +153,5 @@ fun food(init: FoodContainer.() -> Unit): FoodContainer {
     foodRegistry.register(food)
     return food
 }
+
+fun FoodType.resolveSuperType(): FoodType = if (this.superType == null) this else this.superType!!.resolveSuperType()

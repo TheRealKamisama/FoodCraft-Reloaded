@@ -97,12 +97,24 @@ container.drink_machine=Drink Machine
 itemGroup.foodcraftreloaded.base=FoodCraft | Base
 itemGroup.foodcraftreloaded.fruits=FoodCraft | Fruits
 itemGroup.foodcraftreloaded.vegetables=FoodCraft | Vegetables
+itemGroup.foodcraftreloaded.drinks=FoodCraft | Drinks
 itemGroup.foodcraftreloaded.manufactures=FoodCraft | Component
+itemGroup.foodcraftreloaded.jam=FoodCraft | Jams
 
 # Food Types
-type.foodcraftreloaded.vegetables=§bVegetables
-type.foodcraftreloaded.fruits=§aFruits
-type.foodcraftreloaded.manufactures=§3Manufactures
+type.foodcraftreloaded.vegetables=§bVegetable
+type.foodcraftreloaded.fruits=§aFruit
+type.foodcraftreloaded.manufactures=§3Manufacture
+type.foodcraftreloaded.jam=Jam
+type.foodcraftreloaded.juice=Juice
+type.foodcraftreloaded.soda=Soda
+type.foodcraftreloaded.yogurt=Yogurt
+type.foodcraftreloaded.ring=Ring
+type.foodcraftreloaded.chunk=Chunk
+type.foodcraftreloaded.powder=Powder
+type.foodcraftreloaded.bar=Bar
+type.foodcraftreloaded.slice=Slice
+type.foodcraftreloaded.shredded=Shredded
 
 # Tooltip
 tooltip.foodcraftreloaded.manufacture=Manufacturable into: [%s]

@@ -1,9 +1,12 @@
 package com.github.takakuraanri.foodcraftreloaded.minecraft.common.item
 
-import com.github.takakuraanri.foodcraftreloaded.common.food.*
-import com.github.takakuraanri.foodcraftreloaded.minecraft.common.builtin.manufactureType
+import com.github.takakuraanri.foodcraftreloaded.common.food.Food
+import com.github.takakuraanri.foodcraftreloaded.common.food.FoodContainer
+import com.github.takakuraanri.foodcraftreloaded.common.food.originalFood
+import com.github.takakuraanri.foodcraftreloaded.common.food.resolveSuperType
 import com.github.takakuraanri.foodcraftreloaded.minecraft.common.foodTypeCreativeTabs
 import com.github.takakuraanri.foodcraftreloaded.minecraft.getLocalizedName
+import com.github.takakuraanri.foodcraftreloaded.minecraft.toDotString
 import com.github.takakuraanri.foodcraftreloaded.minecraft.translate
 import net.minecraft.client.util.ITooltipFlag
 import net.minecraft.creativetab.CreativeTabs
@@ -25,14 +28,10 @@ open class FCRItemFood(var food: Food) : ItemFood(0, false) {
     override fun getItemStackDisplayName(stack: ItemStack): String {
         if (food is FoodContainer) {
             val container = food as FoodContainer
-            if (container.type == manufactureType) {
+            if (container.properties.containsKey(originalFood)) {
                 return I18n.translateToLocalFormatted(
-                    "item.foodcraftreloaded.${container.getProperty(manufacturedProperty).map(ManufactureProperties::toString).orElse("")}",
-                    I18n.translateToLocal("item.${container.getProperty(originalFood).map { "${it.registryName?.namespace}.${it.registryName?.path}" }.orElse("")}.name").trim())
-            } else if (container.properties.containsKey(productProperty)) {
-                return I18n.translateToLocalFormatted(
-                    "item.foodcraftreloaded.${container.getProperty(productProperty).map(FoodProduct::toString).orElse("")}",
-                    I18n.translateToLocal("item.${container.getProperty(originalFood).map { "${it.registryName?.namespace}.${it.registryName?.path}" }.orElse("")}.name").trim())
+                    "item.foodcraftreloaded.${container.type}",
+                    I18n.translateToLocal("item.${container.getProperty(originalFood).map { it.registryName.toDotString() }.orElse("null")}.name").trim())
             }
         }
         return super.getItemStackDisplayName(stack)
@@ -64,7 +63,7 @@ open class FCRItemFood(var food: Food) : ItemFood(0, false) {
     override fun getCreativeTab(): CreativeTabs? {
         if (food is FoodContainer) {
             val container = food as FoodContainer
-            return foodTypeCreativeTabs[container.type]
+            return foodTypeCreativeTabs[container.type.resolveSuperType()]
         }
         return null
     }
